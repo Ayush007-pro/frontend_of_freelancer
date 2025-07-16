@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
 from similarity_search import infer_query
+import shutil
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -12,9 +13,9 @@ pc = Pinecone(api_key=api_key)
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-def load_texts(extract_to, query):
+def load_texts(extract_to, query, job_post):
     index_name = "freelancer-resume"
-    job_post = "test_1"
+    job_post = job_post
     pdf_folder = extract_to
 
     if index_name not in pc.list_indexes().names():
@@ -56,4 +57,8 @@ def load_texts(extract_to, query):
 
             print(f"Uploaded {filename} ✅")
             
-    infer_query(query)
+    final_returned = infer_query(job_post, pdf_folder, query)
+    
+    return final_returned
+    
+    
