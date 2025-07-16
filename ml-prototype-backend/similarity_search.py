@@ -7,7 +7,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatOllama
 import shutil
 
-llm = ChatOllama(model="llama3")
+llm = ChatOllama(model="llama3.2")
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
@@ -65,14 +65,37 @@ def infer_query(job_post, pdf_folder, query_text):
         
         
         messages_2 = [
-            ("system", 
+            ("system",
             """
             You are an expert hiring assistant.
 
-            Your task is to extract **only the key technical skills** (e.g., ReactJS, MongoDB, AWS, TensorFlow) from the given resume.
+            Your task is to extract only **real, technical skills** from a resume — e.g., Python, ReactJS, MongoDB, AWS, TensorFlow.
 
-            Return a comma-separated list of skills only — no explanations, no formatting, no headings.
-            """),
+            ✅ Include:
+            - Programming languages
+            - Frameworks
+            - Libraries
+            - Cloud platforms
+            - APIs
+            - DevOps tools
+            - Databases
+            - ML/DL tools
+
+            ❌ Do NOT include:
+            - Tools like VS Code, Google Docs, Excel
+            - Non-skills like Datasets, Projects, Resume, Internet
+            - Job roles, degrees, certifications, company names
+            - General phrases like “software,” “machine learning models,” “debugging,” etc.
+
+            Return a **clean, comma-separated list** of **only technical skills**. No headings, no explanation, no bullet points.
+
+            Example input:
+            ---
+            "Experienced developer with expertise in Python, Flask, and TensorFlow. Worked on real-time data pipelines using Kafka and deployed models with Docker and AWS. Comfortable with using VS Code, GitHub, and managing datasets."
+
+            Output:
+            Python, Flask, TensorFlow, Kafka, Docker, AWS
+            """), 
 
             ("human", 
             "Here is the resume:\n{original_text}")

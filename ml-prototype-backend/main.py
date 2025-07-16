@@ -40,7 +40,7 @@ async def upload_zip(file: UploadFile = File(...),
     
     with open(saved_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-        
+         
     result = infer_zip(saved_path, job_post, query)
     
     add_job_post(job_post)
