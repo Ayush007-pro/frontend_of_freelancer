@@ -58,7 +58,7 @@ Visit: [http://localhost:8000/docs](http://localhost:8000/docs) to test the API.
 ├── job_post_list.json       # Stores job post names
 ├── .env                     # Your Pinecone API key
 ├── uploaded_zips/           # Temporary ZIP storage
-├── extracted_pdfs/          # Extracted PDFs from ZIPs
+├── extracted_pdfs/          # Extracted PDFs from ZIPs (also Temporary)
 ```
 
 ---
@@ -69,6 +69,6 @@ Visit: [http://localhost:8000/docs](http://localhost:8000/docs) to test the API.
 |-----------------------------|--------|--------------------------------------|
 | `/upload-zip/`              | POST   | Upload ZIP + job_post + query        |
 | `/get-all-available`        | GET    | List all job posts                   |
-| `/job-posts/{job_post}`     | DELETE | Delete a job post and vectors        |
+| `/remove_job_post     `     | DELETE | Delete a job post and vectors        |
 
 ---
