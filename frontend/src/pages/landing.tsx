@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/navbar';
+import { Divider } from '@mui/material';
 import { 
   Search, 
   ChevronDown, 
@@ -11,8 +13,8 @@ import {
   Monitor,
   Check,
   Shield,
-  Users,
-  ChevronUp,
+  // Users,
+  // ChevronUp,
   Plus,
   Minus
 } from 'lucide-react';
@@ -27,59 +29,7 @@ const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-slate-800 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">A</span>
-                </div>
-                <span className="text-xl font-bold">Abezo</span>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center">
-                Home <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <Link to="/jobs" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                Find Jobs <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <Link to="/employers" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                Employers <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <Link to="/candidates" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                Candidates <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <Link to="/blog" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                Blog <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <Link to="/pages" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                Pages <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-            </nav>
-
-            {/* Right side actions */}
-            <div className="flex items-center space-x-4">
-              <button className="relative p-2 hover:bg-slate-700 rounded-full transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  1
-                </span>
-              </button>
-              <Link to="/login" className="text-gray-300 hover:text-white transition-colors px-4 py-2">
-                Login
-              </Link>
-              <Link to="/register" className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full font-medium transition-colors">
-                Register Now
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar/>
 
       {/* Main Content */}
       <main className="relative">
@@ -99,22 +49,22 @@ const Landing: React.FC = () => {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-[#E2E6E9] px-0 sm:px-6 lg:px-8 pt-16 pb-52">
           {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 mb-6 leading-tight">
+          <div className=" max-w-7xl mx-auto text-center mb-12 items-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 mb-6 leading-tight max-w-4xl mx-auto">
               Unlock Your Future: Find Your{' '}
               <span className="text-slate-700">Perfect Job</span>{' '}
               <span className="text-slate-800">Today!</span>
             </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
               Welcome to Abezo, where your dream job awaits! Browse thousands of job listings.
             </p>
           </div>
 
           {/* Search Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl py-4 px-8 max-w-5xl mx-auto mb-12">
+            <div className="flex items-center justify-between space-x-4">
               {/* Job Categories */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Job Categories</label>
@@ -128,7 +78,7 @@ const Landing: React.FC = () => {
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
                 </div>
               </div>
-
+              <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
               {/* Location */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Location</label>
@@ -142,7 +92,7 @@ const Landing: React.FC = () => {
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
                 </div>
               </div>
-
+              <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
               {/* Keywords */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Keywords or Titles</label>
