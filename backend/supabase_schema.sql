@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS upload_sessions (
     query TEXT NOT NULL,
     filename VARCHAR(255) NOT NULL,
     file_size INTEGER,
+    zip_file_url TEXT, -- New column to store the URL of the uploaded zip file
     processing_result JSONB,
     status VARCHAR(50) DEFAULT 'processing',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -30,6 +31,8 @@ CREATE TABLE IF NOT EXISTS similarity_results (
     similarity_score DECIMAL(5,4) NOT NULL,
     content_snippet TEXT,
     metadata JSONB,
+    pdf_url TEXT, -- New column to store the URL of the extracted PDF
+    llm_summary TEXT, -- New column to store the LLM-generated summary and questions
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     FOREIGN KEY (upload_session_id) REFERENCES upload_sessions(id) ON DELETE CASCADE
 );
@@ -48,11 +51,17 @@ ALTER TABLE similarity_results ENABLE ROW LEVEL SECURITY;
 
 -- Create policies (adjust based on your authentication needs)
 -- For now, allowing all operations (you may want to restrict this in production)
+DROP POLICY IF EXISTS "Allow all operations on job_posts" ON job_posts;
 CREATE POLICY "Allow all operations on job_posts" ON job_posts FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Allow all operations on upload_sessions" ON upload_sessions;
 CREATE POLICY "Allow all operations on upload_sessions" ON upload_sessions FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Allow all operations on similarity_results" ON similarity_results;
 CREATE POLICY "Allow all operations on similarity_results" ON similarity_results FOR ALL USING (true);
 
 -- Function to automatically update the updated_at timestamp
+DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -62,5 +71,6 @@ END;
 $$ language 'plpgsql';
 
 -- Trigger to automatically update updated_at on job_posts
+DROP TRIGGER IF EXISTS update_job_posts_updated_at ON job_posts;
 CREATE TRIGGER update_job_posts_updated_at BEFORE UPDATE
     ON job_posts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

@@ -15,6 +15,30 @@ class SupabaseService:
     def __init__(self):
         self.client = supabase
 
+    # Supabase Storage Operations
+    async def upload_file_to_storage(self, bucket_name: str, file_path: str, destination_path: str) -> Dict[str, Any]:
+        """
+        Uploads a file to Supabase Storage and returns its public URL.
+        :param bucket_name: The name of the storage bucket (e.g., 'resume-pdfs').
+        :param file_path: The local path to the file to upload.
+        :param destination_path: The path within the bucket where the file will be stored (e.g., 'zip_files/session_id/filename.zip').
+        :return: A dictionary with success status and data (public URL) or error.
+        """
+        try:
+            with open(file_path, 'rb') as f:
+                # Upload the file
+                response = self.client.storage.from_(bucket_name).upload(
+                    path=destination_path,
+                    file=f
+                )
+            
+            # Get the public URL for the uploaded file
+            public_url_response = self.client.storage.from_(bucket_name).get_public_url(destination_path)
+            
+            return {"success": True, "data": {"url": public_url_response}}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
     # Job Posts Operations
     async def add_job_post(self, job_post_name: str) -> Dict[str, Any]:
         """Add a new job post to the database"""
@@ -47,7 +71,7 @@ class SupabaseService:
             return False
 
     # Upload Sessions Operations
-    async def create_upload_session(self, job_post: str, query: str, filename: str, file_size: int = None) -> Dict[str, Any]:
+    async def create_upload_session(self, job_post: str, query: str, filename: str, file_size: int = None, zip_file_url: str = None) -> Dict[str, Any]:
         """Create a new upload session"""
         try:
             result = self.client.table("upload_sessions").insert({
@@ -55,6 +79,7 @@ class SupabaseService:
                 "query": query,
                 "filename": filename,
                 "file_size": file_size,
+                "zip_file_url": zip_file_url, # Store the zip file URL
                 "status": "processing",
                 "created_at": datetime.utcnow().isoformat()
             }).execute()
@@ -90,7 +115,11 @@ class SupabaseService:
 
     # Similarity Results Operations
     async def save_similarity_results(self, upload_session_id: int, results: List[Dict[str, Any]]) -> bool:
-        """Save similarity search results"""
+        """
+        Save similarity search results, including PDF URLs and LLM summaries.
+        :param upload_session_id: The ID of the parent upload session.
+        :param results: A list of dictionaries, each containing document_name, similarity_score, pdf_url, llm_summary, and metadata.
+        """
         try:
             similarity_data = []
             for result in results:
@@ -98,8 +127,10 @@ class SupabaseService:
                     "upload_session_id": upload_session_id,
                     "document_name": result.get("document_name", ""),
                     "similarity_score": result.get("similarity_score", 0.0),
-                    "content_snippet": result.get("content_snippet", ""),
+                    "content_snippet": result.get("content_snippet", ""), # This might be redundant if llm_summary is comprehensive
                     "metadata": result.get("metadata", {}),
+                    "pdf_url": result.get("pdf_url", ""), # Store PDF URL
+                    "llm_summary": result.get("llm_summary", ""), # Store LLM summary and questions
                     "created_at": datetime.utcnow().isoformat()
                 })
             

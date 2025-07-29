@@ -14,7 +14,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 class JobPost(Base):
-    __tablename__ = "job_posts"
+    _tablename_ = "job_posts"
     
     id = Column(Integer, primary_key=True, index=True)
     job_post_name = Column(String, unique=True, index=True, nullable=False)
@@ -22,7 +22,7 @@ class JobPost(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class UploadSession(Base):
-    __tablename__ = "upload_sessions"
+    _tablename_ = "upload_sessions"
     
     id = Column(Integer, primary_key=True, index=True)
     job_post = Column(String, nullable=False)
@@ -36,7 +36,7 @@ class UploadSession(Base):
     error_message = Column(Text, nullable=True)
 
 class SimilarityResult(Base):
-    __tablename__ = "similarity_results"
+    _tablename_ = "similarity_results"
     
     id = Column(Integer, primary_key=True, index=True)
     upload_session_id = Column(Integer, nullable=False)
