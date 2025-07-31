@@ -5,8 +5,12 @@ from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
+import sys
 from dotenv import load_dotenv
 from handle_pdfs import infer_zip
+
+# Add the backend directory to the Python path
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'backend'))
 from supabase_service import db_service
 
 # Load environment variables
